@@ -31,6 +31,13 @@ def pubdate(u):
     except Exception: pass
     _dc[u]=d; return d
 REPORT=[]
+from urllib.parse import quote
+def share(u):
+    q=quote(u,safe=''); e=html.escape(u)
+    return (f'<div class="share"><a href="https://www.facebook.com/sharer/sharer.php?u={q}" target="_blank" rel="noopener">Facebook</a>'
+            f'<a href="https://twitter.com/intent/tweet?url={q}" target="_blank" rel="noopener">X</a>'
+            f'<a href="https://social-plugins.line.me/lineit/share?url={q}" target="_blank" rel="noopener">LINE</a>'
+            f'<button type="button" data-copy="{e}">คัดลอกลิงก์</button></div>')
 cards=[]
 os.makedirs(f'{D}/assets/posts',exist_ok=True)
 for p in r.get('data',[]):
@@ -57,10 +64,11 @@ for p in r.get('data',[]):
         extra+='<p class="src">ที่มา: '+' · '.join(f'<a href="{html.escape(u)}" target="_blank" rel="noopener">{html.escape(outlet(u))}</a>' for u in srcs)+'</p>'
         REPORT[-1]+=(len(srcs),)
     else: REPORT.append((title[:40],'none',None,None,0))
-    cards.append(f'''<article class="card">{img}<div class="cb"><time>{t:%d/%m/%Y %H:%M} น. (เวลาไทย)</time><h3>{html.escape(title)}</h3><p>{html.escape(body)}…</p>{extra}<a href="{html.escape(p.get('permalink_url',''))}" target="_blank" rel="noopener">อ่านต่อบน Facebook / Read on Facebook →</a></div></article>''')
+    cards.append(f'''<article class="card">{img}<div class="cb"><time>{t:%d/%m/%Y %H:%M} น. (เวลาไทย)</time><h3>{html.escape(title)}</h3><p>{html.escape(body)}…</p>{extra}<a href="{html.escape(p.get('permalink_url',''))}" target="_blank" rel="noopener">อ่านต่อบน Facebook / Read on Facebook →</a>{share(p.get('permalink_url',''))}</div></article>''')
 posts='\n'.join(cards) or '<p>ยังไม่มีโพสต์ / No posts yet.</p>'
 tpl=open(f'{D}/template.html',encoding='utf-8').read()
 out=tpl.replace('{{POSTS}}',posts).replace('{{UPDATED}}',datetime.datetime.now(datetime.timezone.utc).strftime('%d/%m/%Y %H:%M UTC'))
 open(f'{D}/index.html','w',encoding='utf-8').write(out)
+open(f'{D}/sitemap.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://phraison28-sudo.github.io/thainewsonline/</loc><lastmod>'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')+'</lastmod><changefreq>hourly</changefreq></url></urlset>\n')
 print('posts:',len(cards))
 for x in REPORT: print(x)

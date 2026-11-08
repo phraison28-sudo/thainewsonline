@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://phraison28-sudo.github.io/thainewsonline/sitemap.xml
