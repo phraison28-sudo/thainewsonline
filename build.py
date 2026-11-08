@@ -31,6 +31,13 @@ def pubdate(u):
     except Exception: pass
     _dc[u]=d; return d
 REPORT=[]
+# Manually verified sources for posts whose Page comment has none (website only)
+MANUAL_SOURCES={
+ '122163662433250428':['https://www.thaipost.net/criminality-news/1102810/','https://mgronline.com/crime/detail/9690000106356'],
+ '122163240129250428':['https://www.theguardian.com/football/2026/nov/01/liverpool-arsenal-premier-league-match-report','https://www.abc.net.au/news/2026-11-02/football-arsenal-ends-anfield-drought-liverpool-var-drama/107334968'],
+ '122163099585250428':['https://www.skysports.com/football/chelsea-vs-manchester-united/report/559527','https://apnews.com/article/lisandro-martinez-red-card-man-united-chelsea-8fe3b56172637a2a2ef6d48c9acff915'],
+}
+OUTLETS.update({'thaipost.net':'ไทยโพสต์','mgronline.com':'MGR Online','theguardian.com':'The Guardian','skysports.com':'Sky Sports'})
 from urllib.parse import quote
 def share(u):
     q=quote(u,safe=''); e=html.escape(u)
@@ -53,6 +60,7 @@ for p in r.get('data',[]):
         except Exception: pass
     cm=[c for c in p.get('comments',{}).get('data',[]) if c.get('from',{}).get('id')==PAGE]
     srcs=urls(msg)+[u for u in urls(cm[0]['message'] if cm else '') if u not in urls(msg)]
+    if not srcs: srcs=MANUAL_SOURCES.get(p['id'].split('_')[-1],[])
     extra=''
     if srcs:
         if len(msg)>600:
