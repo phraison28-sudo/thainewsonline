@@ -48,7 +48,7 @@ MANUAL_SOURCES={
  '122163240129250428':['https://www.theguardian.com/football/2026/nov/01/liverpool-arsenal-premier-league-match-report','https://www.abc.net.au/news/2026-11-02/football-arsenal-ends-anfield-drought-liverpool-var-drama/107334968'],
  '122163099585250428':['https://www.skysports.com/football/chelsea-vs-manchester-united/report/559527','https://apnews.com/article/lisandro-martinez-red-card-man-united-chelsea-8fe3b56172637a2a2ef6d48c9acff915'],
 }
-OUTLETS.update({'thaipost.net':'ไทยโพสต์','mgronline.com':'MGR Online','theguardian.com':'The Guardian','skysports.com':'Sky Sports'})
+OUTLETS.update({'ejan.co':'อีจัน','thaipost.net':'ไทยโพสต์','mgronline.com':'MGR Online','theguardian.com':'The Guardian','skysports.com':'Sky Sports'})
 from urllib.parse import quote
 def share(u):
     q=quote(u,safe=''); e=html.escape(u)
